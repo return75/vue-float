@@ -6,7 +6,7 @@
            @mouseup="stopDragging"
            @touchmove="handleMove"
       >
-        <span @click="toggleShow" class="cursor-pointer">#</span>
+        <span @click="toggleShow" class="cursor-pointer">{{isContentVisible ? '>' : '<'}}</span>
         <div>
           <close-icon class="cursor-pointer pointer-events-auto" v-if="!hideCloseBtn" @click="removeDraggable"></close-icon>
           <span class="text-white mr-2">{{headTitle}}</span>
@@ -28,7 +28,7 @@ export default {
   name: "VueDraggable",
   components: {CloseIcon},
   data: () => ({
-    contentHeight: null,
+    contentHeight: '0',
     position: {
       left: 0,
       top: 0
@@ -90,16 +90,13 @@ export default {
       this.position.top = this.top
     },
     toggleShow() {
-      let height = document.querySelector('.content').offsetHeight
-      console.log('height', height)
-      if (height === 0) {
-        this.showContent()
-      } else {
+      if (this.isContentVisible) {
         this.hideContent()
+      } else {
+        this.showContent()
       }
     },
     showContent() {
-      console.log('this.contentHeight', this.contentHeight)
       document.querySelector('.content').style.height = `${this.contentHeight}px`
       this.isContentVisible = true
     },
@@ -114,6 +111,9 @@ export default {
       this.position.left = e.touches[0].clientX
       this.position.top = e.touches[0].clientY
     },
+    setContentHeight() {
+      this.contentHeight =  document.querySelector('.content').clientHeight
+    }
   },
   beforeUpdate() {
     let contentDiv = document.querySelector('.content')
@@ -138,6 +138,7 @@ export default {
   },
   mounted() {
     this.setPosition()
+    this.setContentHeight()
   }
 }
 </script>
@@ -145,11 +146,9 @@ export default {
 .vue-draggable {
   position: absolute;
   pointer-events: none;
-  max-width: 95%;
 }
 .header {
   pointer-events: auto;
-  width: 100%;
   display: flex;
   justify-content: space-between;
   padding: 12px
@@ -157,6 +156,9 @@ export default {
 .content {
   overflow: hidden;
   transition: .5s;
+  background: #ededed;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 .fullscreen {
   left: 0;
