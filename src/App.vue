@@ -1,14 +1,8 @@
 <template>
   <div id="app">
     <VueDraggable>
-      <div v-for="i in items">
+      <div v-for="(i, index) in items" :key="index">
         <h1>alireza</h1>
-      </div>
-    </VueDraggable>
-
-    <VueDraggable :left="300" :top="100">
-      <div v-for="i in items">
-        <h1>hamidreza</h1>
       </div>
     </VueDraggable>
   </div>
