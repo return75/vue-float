@@ -1,17 +1,35 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <VueDraggable>
+      <div v-for="i in items">
+        <h1>alireza</h1>
+      </div>
+    </VueDraggable>
+
+    <VueDraggable :left="300" :top="100">
+      <div v-for="i in items">
+        <h1>hamidreza</h1>
+      </div>
+    </VueDraggable>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import VueDraggable from "@/components/VueDraggable.vue";
+
 
 export default {
   name: 'App',
+  data: () => ({
+    items: 1
+  }),
   components: {
-    HelloWorld
+    VueDraggable
+  },
+  mounted() {
+    setInterval(() => {
+      this.items++
+    }, 4000)
   }
 }
 </script>
@@ -23,6 +41,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
