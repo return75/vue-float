@@ -1,12 +1,13 @@
 {
-  "name": "vue-draggable-component",
+  "name": "vue-float",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-bundle": "vue-cli-service build --target lib --name vue-float src/index.js",
     "lint": "vue-cli-service lint"
   },
+  "main": "./dist/vue-float.common.js",
   "dependencies": {
     "core-js": "^3.8.3",
     "vue": "^2.6.14"
@@ -34,6 +35,10 @@
       "parser": "@babel/eslint-parser"
     },
     "rules": {}
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/return75/vue-float.git"
   },
   "browserslist": [
     "> 1%",
