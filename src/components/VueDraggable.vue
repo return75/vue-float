@@ -14,7 +14,7 @@
 
 <!--        <v-icon color="white" @click="toggleShow">{{isContentVisible ? 'mdi-menu-up' : 'mdi-menu-down'}}</v-icon>-->
       </div>
-      <div class="content pointer-events-auto">
+      <div class="content pointer-events-auto" ref="content">
           <slot></slot>
       </div>
     </div>
@@ -31,7 +31,9 @@ export default {
     contentHeight: '0',
     position: {
       left: 0,
-      top: 0
+      top: 0,
+      initialLeft: 0,
+      initialTop: 0,
     },
     isRendered: true,
     isContentVisible: true,
@@ -74,10 +76,12 @@ export default {
   },
   methods: {
     mouseMoveEvent(e) {
-      this.position.left = e.clientX - 100
-      this.position.top = e.clientY - 20
+      this.position.left = e.clientX - this.position.initialLeft
+      this.position.top = e.clientY - this.position.initialTop
     },
-    startDragging() {
+    startDragging(e) {
+      this.position.initialLeft = e.layerX
+      this.position.initialTop = e.layerY
       document.addEventListener('mousemove', this.mouseMoveEvent, false);
       document.addEventListener('touchmove', this.mouseMoveEvent, false);
     },
@@ -97,11 +101,11 @@ export default {
       }
     },
     showContent() {
-      document.querySelector('.content').style.height = `${this.contentHeight}px`
+      this.$refs.content.style.height = `${this.contentHeight}px`
       this.isContentVisible = true
     },
     hideContent() {
-      document.querySelector('.content').style.height = '0px'
+      this.$refs.content.style.height = '0'
       this.isContentVisible = false
     },
     removeDraggable() {
@@ -112,11 +116,12 @@ export default {
       this.position.top = e.touches[0].clientY
     },
     setContentHeight() {
-      this.contentHeight =  document.querySelector('.content').clientHeight
+      this.contentHeight =  this.$refs.content.clientHeight
+      console.log(this.contentHeight)
     }
   },
   beforeUpdate() {
-    let contentDiv = document.querySelector('.content')
+    let contentDiv = this.$refs.contentf
     if(contentDiv) {
       this.contentHeight = contentDiv.clientHeight
       if (this.isContentVisible) {
@@ -126,7 +131,7 @@ export default {
 
   },
   updated() {
-    let contentDiv = document.querySelector('.content')
+    let contentDiv = this.$refs.content
     if(contentDiv) {
       let contentHeight = contentDiv.clientHeight
       this.contentHeight = contentHeight
@@ -143,6 +148,9 @@ export default {
 }
 </script>
 <style>
+.fixed {
+  position: fixed;
+}
 .vue-draggable {
   position: absolute;
   pointer-events: none;

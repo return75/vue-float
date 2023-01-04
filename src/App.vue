@@ -5,12 +5,17 @@
         <h1>alireza</h1>
       </div>
     </VueDraggable>
+    <VueDraggable :left="200" :top="200">
+      <div v-for="(i, index) in items" :key="index">
+        <h1>hamed</h1>
+      </div>
+    </VueDraggable>
+
   </div>
 </template>
 
 <script>
 import VueDraggable from "@/components/VueDraggable.vue";
-
 
 export default {
   name: 'App',
@@ -18,7 +23,7 @@ export default {
     items: 5
   }),
   components: {
-    VueDraggable
+    VueDraggable,
   },
   mounted() {
     // setInterval(() => {
