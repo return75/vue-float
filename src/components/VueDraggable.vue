@@ -92,18 +92,23 @@ export default {
       this.position.top = this.top
     },
     toggleShow() {
+      if(!this.isContentVisible) {
+        this.showContent()
+        return;
+      }
       if (this.isContentVisible) {
         this.hideContent()
-      } else {
-        this.showContent()
       }
+
     },
     showContent() {
+      console.log('show content')
       this.$refs.content.style.height = `${this.contentHeight}px`
       this.isContentVisible = true
     },
     hideContent() {
-      this.$refs.content.style.height = '0'
+      console.log('hide content')
+      this.$refs.content.style.height = '0px'
       this.isContentVisible = false
     },
     removeDraggable() {
@@ -115,29 +120,33 @@ export default {
     },
     setContentHeight() {
       this.contentHeight =  this.$refs.content.clientHeight
-      console.log(this.contentHeight)
+      this.$refs.content.style.height = `${this.contentHeight}px`
+      console.log('this.contentHeight', this.contentHeight)
     }
   },
   beforeUpdate() {
-    let contentDiv = this.$refs.contentf
-    if(contentDiv) {
-      this.contentHeight = contentDiv.clientHeight
-      if (this.isContentVisible) {
-        contentDiv.style.height = 'unset'
-      }
-    }
-
+    // let contentDiv = this.$refs.contentf
+    // if(contentDiv) {
+    //   this.contentHeight = contentDiv.clientHeight
+    //   if (this.isContentVisible) {
+    //     contentDiv.style.height = `${contentDiv.clientHeight}px`
+    //   }
+    // }
   },
   updated() {
-    let contentDiv = this.$refs.content
-    if(contentDiv) {
-      let contentHeight = contentDiv.clientHeight
-      this.contentHeight = contentHeight
-      if(this.isContentVisible) {
-        contentDiv.style.height = `${contentHeight}px`
-      }
+    // let contentDiv = this.$refs.content
+    // if(contentDiv) {
+    //   let contentHeight = contentDiv.clientHeight
+    //   this.contentHeight = contentHeight
+    //   if(this.isContentVisible) {
+    //     contentDiv.style.height = `${contentHeight}px`
+    //   }
+    // }
+  },
+  watch: {
+    isContentVisible(val) {
+      console.log('isContentVisible', val)
     }
-
   },
   mounted() {
     this.setPosition()
