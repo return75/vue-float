@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <VueDraggable :left="200" :top="200">
-      <div v-for="(i, index) in items" :key="index">
-        <h1>alireza</h1>
-      </div>
+    <VueDraggable :left="200" :top="200" head-title="title" @move="moving">
+      <h1>sample component</h1>
+      <h1>sample component</h1>
+      <h1>sample component</h1>
     </VueDraggable>
   </div>
 </template>
@@ -16,14 +16,14 @@ export default {
   data: () => ({
     items: 5
   }),
+  methods: {
+    moving(e) {
+      console.log('e', e)
+    }
+  },
   components: {
     VueDraggable,
   },
-  mounted() {
-    // setInterval(() => {
-    //   this.items++
-    // }, 4000)
-  }
 }
 </script>
 

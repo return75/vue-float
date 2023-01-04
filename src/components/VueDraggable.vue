@@ -1,14 +1,14 @@
 <template>
   <div class="fixed fullscreen overflow-hidden pointer-events-none" v-if="isRendered">
     <div class="vue-draggable" :style="{left: `${position.left}px`, top: `${position.top}px`, width: `${width}px`}">
-      <div class="header" :style="headerStyle"
+      <div class="header" :style="headStyle"
            @mousedown="startDragging"
            @mouseup="stopDragging"
            @touchmove="handleMove"
       >
         <span @click="toggleShow" class="cursor-pointer caret-down" :class="{'rotate-up': !isContentVisible}"></span>
-        <div>
-          <close-icon class="cursor-pointer pointer-events-auto" v-if="!hideCloseBtn" @click="removeDraggable"></close-icon>
+        <div dir="rtl">
+          <close-icon class="close-icon" v-if="!hideCloseBtn" @click="removeDraggable"></close-icon>
           <span class="text-white mr-2">{{headTitle}}</span>
         </div>
       </div>
@@ -25,8 +25,16 @@ import CloseIcon from './CloseIcon'
 export default {
   name: "VueDraggable",
   components: {CloseIcon},
+  emits: ['startDrag', 'stopDrag'],
   data: () => ({
     contentHeight: '0',
+    headStyle: {
+      backgroundColor: '#015bbe',
+      color: 'white',
+      borderTopLeftRadius: '5px',
+      borderTopRightRadius: '5px',
+      cursor: 'move',
+    },
     position: {
       left: 0,
       top: 0,
@@ -51,13 +59,7 @@ export default {
     },
     headerStyle: {
       type: Object,
-      default: () =>  ({
-        backgroundColor: '#015bbe',
-        color: 'white',
-        borderTopLeftRadius: '5px',
-        borderTopRightRadius: '5px',
-        cursor: 'move',
-      })
+      default: () =>  {}
     },
     left: {
       type: Number,
@@ -74,16 +76,19 @@ export default {
   },
   methods: {
     mouseMoveEvent(e) {
+      this.emitMoving(e)
       this.position.left = e.clientX - this.position.initialLeft
       this.position.top = e.clientY - this.position.initialTop
     },
     startDragging(e) {
       this.position.initialLeft = e.layerX
       this.position.initialTop = e.layerY
+      this.emitStartDragging(e)
       document.addEventListener('mousemove', this.mouseMoveEvent, false);
       document.addEventListener('touchmove', this.mouseMoveEvent, false);
     },
-    stopDragging() {
+    stopDragging(e) {
+      this.emitStopDragging(e)
       document.removeEventListener('mousemove', this.mouseMoveEvent, false);
       document.removeEventListener('touchmove', this.mouseMoveEvent, false);
     },
@@ -94,20 +99,15 @@ export default {
     toggleShow() {
       if(!this.isContentVisible) {
         this.showContent()
-        return;
-      }
-      if (this.isContentVisible) {
+      } else {
         this.hideContent()
       }
-
     },
     showContent() {
-      console.log('show content')
       this.$refs.content.style.height = `${this.contentHeight}px`
       this.isContentVisible = true
     },
     hideContent() {
-      console.log('hide content')
       this.$refs.content.style.height = '0px'
       this.isContentVisible = false
     },
@@ -121,36 +121,44 @@ export default {
     setContentHeight() {
       this.contentHeight =  this.$refs.content.clientHeight
       this.$refs.content.style.height = `${this.contentHeight}px`
-      console.log('this.contentHeight', this.contentHeight)
+    },
+    mergeHeaderStyle() {
+      this.headStyle = Object.assign({}, this.headStyle, this.headerStyle);
+    },
+    emitStartDragging(e) {
+      this.$emit('start-drag', e)
+    },
+    emitStopDragging(e) {
+      this.$emit('stop-drag', e)
+    },
+    emitMoving(e) {
+      this.$emit('move', e)
     }
   },
   beforeUpdate() {
-    // let contentDiv = this.$refs.contentf
-    // if(contentDiv) {
-    //   this.contentHeight = contentDiv.clientHeight
-    //   if (this.isContentVisible) {
-    //     contentDiv.style.height = `${contentDiv.clientHeight}px`
-    //   }
-    // }
+    let contentDiv = this.$refs.content
+    if(contentDiv) {
+      this.contentHeight = contentDiv.clientHeight
+      if (this.isContentVisible) {
+        this.$refs.content.style.height = 'unset'
+      }
+    }
   },
   updated() {
-    // let contentDiv = this.$refs.content
-    // if(contentDiv) {
-    //   let contentHeight = contentDiv.clientHeight
-    //   this.contentHeight = contentHeight
-    //   if(this.isContentVisible) {
-    //     contentDiv.style.height = `${contentHeight}px`
-    //   }
-    // }
-  },
-  watch: {
-    isContentVisible(val) {
-      console.log('isContentVisible', val)
-    }
+   setTimeout(() => {
+     let contentDiv = this.$refs.content
+     if(contentDiv) {
+       this.contentHeight = contentDiv.clientHeight
+       if(this.isContentVisible) {
+         this.$refs.content.style.height = `${this.contentHeight}px`
+       }
+     }
+   }, 300)
   },
   mounted() {
     this.setPosition()
     this.setContentHeight()
+    this.mergeHeaderStyle()
   }
 }
 </script>
@@ -208,5 +216,10 @@ export default {
 .rotate-up {
   transform: rotateZ(180deg);
   transform-origin: 50% 3px;
+}
+.close-icon {
+  cursor: pointer;
+  pointer-events: auto;
+  margin-left: 12px;
 }
 </style>
