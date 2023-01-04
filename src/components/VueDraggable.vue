@@ -6,13 +6,11 @@
            @mouseup="stopDragging"
            @touchmove="handleMove"
       >
-        <span @click="toggleShow" class="cursor-pointer">{{isContentVisible ? '>' : '<'}}</span>
+        <span @click="toggleShow" class="cursor-pointer caret-down" :class="{'rotate-up': !isContentVisible}"></span>
         <div>
           <close-icon class="cursor-pointer pointer-events-auto" v-if="!hideCloseBtn" @click="removeDraggable"></close-icon>
           <span class="text-white mr-2">{{headTitle}}</span>
         </div>
-
-<!--        <v-icon color="white" @click="toggleShow">{{isContentVisible ? 'mdi-menu-up' : 'mdi-menu-down'}}</v-icon>-->
       </div>
       <div class="content pointer-events-auto" ref="content">
           <slot></slot>
@@ -159,6 +157,7 @@ export default {
   pointer-events: auto;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 12px
 }
 .content {
@@ -188,5 +187,17 @@ export default {
 }
 .cursor-pointer {
   cursor: pointer;
+}
+.caret-down {
+  width: 0;
+  height: 0;
+  display: inline-block;
+  border: 6px solid transparent;
+  border-top-color: #ffffff;
+  transition: .3s;
+}
+.rotate-up {
+  transform: rotateZ(180deg);
+  transform-origin: 50% 3px;
 }
 </style>
