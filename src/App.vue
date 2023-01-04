@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import VueDraggable from "@/components/VueDraggable.vue";
+import VueDraggable from "./index";
 
 export default {
   name: 'App',
