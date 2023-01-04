@@ -1,24 +1,25 @@
 # vue-draggable-component
 
-## Project setup
+## installation
 ```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
+ yarn install vue-float
 ```
 
-### Compiles and minifies for production
+### usage:
 ```
-yarn build
+<vue-float >
+  <h1>this is vue float component</h1>
+</vue-float>
+```
+.vue file:
+```
+  import VueFloat from 'vue-float'
+  import "vue-float/dist/vue-float.css"
+  ...
+  export default {
+        components: {
+            VueFloat,
+        },
+  ...
 ```
 
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
