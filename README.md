@@ -1,4 +1,4 @@
-# vue-draggable-component
+# vue-float
 
 ## installation
 ```

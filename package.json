@@ -1,6 +1,6 @@
 {
   "name": "vue-float",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -41,7 +41,7 @@
     "url": "https://github.com/return75/vue-float.git"
   },
   "files": [  "dist/*",  "src/*",  "public/*",  "*.json",  "*.js"],
-  "keywords": ["vue draggable", "vue drag drop", "drag component", "vue float"],
+  "keywords": ["vue draggable component", "vue drag drop", "drag component", "vue-float", "vue component", "v-drag"],
   "browserslist": [
     "> 1%",
     "last 2 versions",
