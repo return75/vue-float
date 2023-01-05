@@ -1,22 +1,20 @@
 <template>
-  <div class="fixed fullscreen overflow-hidden pointer-events-none" v-if="isRendered">
-    <div class="vue-draggable" :style="{left: `${position.left}px`, top: `${position.top}px`, width: `${width}px`}">
+    <div v-if="isRendered" class="vue-draggable" :style="{left: `${position.left}px`, top: `${position.top}px`, width: `${width}px`}">
       <div class="header" :style="headStyle"
            @mousedown="startDragging"
            @mouseup="stopDragging"
            @touchmove="handleMove"
       >
         <span @click="toggleShow" class="cursor-pointer caret-down" :class="{'rotate-up': !isContentVisible}"></span>
-        <div dir="rtl">
+        <div>
+          <span class="text-white mr-2 head-title">{{headTitle}}</span>
           <close-icon class="close-icon" v-if="!hideCloseBtn" @click="removeDraggable"></close-icon>
-          <span class="text-white mr-2">{{headTitle}}</span>
         </div>
       </div>
-      <div class="content pointer-events-auto" ref="content">
+      <div class="content" ref="content">
           <slot></slot>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -46,8 +44,7 @@ export default {
   }),
   props: {
     width: {
-      type: Number,
-      default: 400
+      type: [Number, String],
     },
     headTitle: {
       type: String,
@@ -81,11 +78,19 @@ export default {
       this.position.top = e.clientY - this.position.initialTop
     },
     startDragging(e) {
+      this.pauseEvent(e)
       this.position.initialLeft = e.layerX
       this.position.initialTop = e.layerY
       this.emitStartDragging(e)
       document.addEventListener('mousemove', this.mouseMoveEvent, false);
       document.addEventListener('touchmove', this.mouseMoveEvent, false);
+    },
+    pauseEvent(e){
+        if(e.stopPropagation) e.stopPropagation();
+        if(e.preventDefault) e.preventDefault();
+        e.cancelBubble = true;
+        e.returnValue = false;
+        return false;
     },
     stopDragging(e) {
       this.emitStopDragging(e)
@@ -162,16 +167,13 @@ export default {
   }
 }
 </script>
-<style>
-.fixed {
-  position: fixed;
-}
+<style scoped>
 .vue-draggable {
-  position: absolute;
-  pointer-events: none;
+  height: auto;
+  position: fixed;
+  box-sizing: border-box;
 }
 .header {
-  pointer-events: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -189,12 +191,6 @@ export default {
   right: 0;
   top: 0;
   bottom: 0;
-}
-.pointer-events-none {
-  pointer-events: none;
-}
-.pointer-events-auto {
-  pointer-events: auto;
 }
 .overflow-hidden {
   overflow: hidden;
@@ -219,7 +215,9 @@ export default {
 }
 .close-icon {
   cursor: pointer;
-  pointer-events: auto;
-  margin-left: 12px;
+}
+.head-title {
+  margin-right: 1.5rem;
+  margin-left: 1.5rem;
 }
 </style>
