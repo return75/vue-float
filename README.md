@@ -23,3 +23,4 @@
   ...
 ```
 
+<img src="https://github.com/return75/vue-float/blob/master/intro.gif" width="100%" />
