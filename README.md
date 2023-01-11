@@ -2,12 +2,12 @@
 
 ## installation
 ```
- yarn install vue-float
+ npm install vue-float
 ```
 
 ### usage:
 ```
-<vue-float >
+<vue-float>
   <h1>this is vue float component</h1>
 </vue-float>
 ```
