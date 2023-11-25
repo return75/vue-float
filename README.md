@@ -1,3 +1,5 @@
+<img src="https://github.com/return75/vue-float/blob/master/intro.gif" width="100%" />
+
 # vue-float
 
 ## installation
@@ -23,4 +25,4 @@
   ...
 ```
 
-<img src="https://github.com/return75/vue-float/blob/master/intro.gif" width="100%" />
+
